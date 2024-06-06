@@ -368,32 +368,32 @@ public class ScreenRecordService extends Service {
     private void setOutputFormatAsInt(String outputFormat) {
         switch (outputFormat) {
             case "DEFAULT":
-                outputFormatAsInt = 0;
+                outputFormatAsInt = MediaRecorder.OutputFormat.DEFAULT;
                 break;
             case "THREE_GPP":
-                outputFormatAsInt = 1;
+                outputFormatAsInt = MediaRecorder.OutputFormat.THREE_GPP;
                 break;
             case "AMR_NB":
-                outputFormatAsInt = 3;
+                outputFormatAsInt = MediaRecorder.OutputFormat.AMR_NB;
                 break;
             case "AMR_WB":
-                outputFormatAsInt = 4;
+                outputFormatAsInt = MediaRecorder.OutputFormat.AMR_WB;
                 break;
             case "AAC_ADTS":
-                outputFormatAsInt = 6;
+                outputFormatAsInt = MediaRecorder.OutputFormat.AAC_ADTS;
                 break;
             case "MPEG_2_TS":
-                outputFormatAsInt = 8;
+                outputFormatAsInt = MediaRecorder.OutputFormat.MPEG_2_TS;
                 break;
             case "WEBM":
-                outputFormatAsInt = 9;
+                outputFormatAsInt = MediaRecorder.OutputFormat.WEBM;
                 break;
             case "OGG":
-                outputFormatAsInt = 11;
+                outputFormatAsInt = MediaRecorder.OutputFormat.OGG;
                 break;
             case "MPEG_4":
             default:
-                outputFormatAsInt = 2;
+                outputFormatAsInt = MediaRecorder.OutputFormat.MPEG_4;
         }
     }
 
@@ -402,22 +402,23 @@ public class ScreenRecordService extends Service {
     private void setvideoEncoderAsInt(String encoder) {
         switch (encoder) {
             case "DEFAULT":
-                videoEncoderAsInt = 5;  //Change to use HEVC instead
+                //videoEncoderAsInt = MediaRecorder.VideoEncoder.DEFAULT
+                videoEncoderAsInt = MediaRecorder.VideoEncoder.HEVC;  //Change to use HEVC instead 
                 break;
             case "H263":
-                videoEncoderAsInt = 1;
+                videoEncoderAsInt = MediaRecorder.VideoEncoder.H263;
                 break;
             case "H264":
-                videoEncoderAsInt = 2;
+                videoEncoderAsInt = MediaRecorder.VideoEncoder.H264;
                 break;
             case "MPEG_4_SP":
-                videoEncoderAsInt = 3;
+                videoEncoderAsInt = MediaRecorder.VideoEncoder.MPEG_4_SP;
                 break;
             case "VP8":
-                videoEncoderAsInt = 4;
+                videoEncoderAsInt = MediaRecorder.VideoEncoder.VP8;
                 break;
             case "HEVC":
-                videoEncoderAsInt = 5;
+                videoEncoderAsInt = MediaRecorder.VideoEncoder.HEVC;
                 break;
         }
     }
@@ -427,37 +428,37 @@ public class ScreenRecordService extends Service {
     private void setAudioSourceAsInt(String audioSource) {
         switch (audioSource) {
             case "DEFAULT":
-                audioSourceAsInt = 0;
+                audioSourceAsInt = MediaRecorder.AudioSource.DEFAULT;
                 break;
             case "MIC":
-                audioSourceAsInt = 1;
+                audioSourceAsInt = MediaRecorder.AudioSource.MIC;
                 break;
             case "VOICE_UPLINK":
-                audioSourceAsInt = 2;
+                audioSourceAsInt = MediaRecorder.AudioSource.VOICE_UPLINK;
                 break;
             case "VOICE_DOWNLINK":
-                audioSourceAsInt = 3;
+                audioSourceAsInt = MediaRecorder.AudioSource.VOICE_DOWNLINK;
                 break;
             case "VOICE_CALL":
-                audioSourceAsInt = 4;
+                audioSourceAsInt = MediaRecorder.AudioSource.VOICE_CALL;
                 break;
             case "CAMCODER":
-                audioSourceAsInt = 5;
+                audioSourceAsInt = MediaRecorder.AudioSource.CAMCORDER;
                 break;
             case "VOICE_RECOGNITION":
-                audioSourceAsInt = 6;
+                audioSourceAsInt = MediaRecorder.AudioSource.VOICE_RECOGNITION;
                 break;
             case "VOICE_COMMUNICATION":
-                audioSourceAsInt = 7;
+                audioSourceAsInt = MediaRecorder.AudioSource.VOICE_COMMUNICATION;
                 break;
             case "REMOTE_SUBMIX":
-                audioSourceAsInt = 8;
+                audioSourceAsInt = MediaRecorder.AudioSource.REMOTE_SUBMIX;
                 break;
             case "UNPROCESSED":
-                audioSourceAsInt = 9;
+                audioSourceAsInt = MediaRecorder.AudioSource.UNPROCESSED;
                 break;
             case "VOICE_PERFORMANCE":
-                audioSourceAsInt = 10;
+                audioSourceAsInt = MediaRecorder.AudioSource.VOICE_PERFORMANCE;
                 break;
         }
     }
