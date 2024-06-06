@@ -3,66 +3,75 @@ package com.hbisoft.hbrecorder;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public abstract class Countdown extends Timer {
-    private long totalTime, interval, delay;
+public abstract class Countdown {
+    private final Timer timer;
+    private long totalTime;
+    private long interval;
+
+    private long delay;
     private TimerTask task;
     private long startTime = -1;
-    private boolean restart = false, wasCancelled = false, wasStarted = false;
 
     public Countdown(long totalTime, long interval) {
         this(totalTime, interval, 0);
     }
 
     public Countdown(long totalTime, long interval, long delay) {
-        super("PreciseCountdown", true);
-        this.delay = delay;
-        this.interval = interval;
         this.totalTime = totalTime;
-        this.task = getTask(totalTime);
+        this.interval = interval;
+        this.delay = delay;
+        this.timer = new Timer("PreciseCountdown", true);
+        this.task = createTask();
     }
 
     public void start() {
-        wasStarted = true;
-        this.scheduleAtFixedRate(task, delay, interval);
+        timer.scheduleAtFixedRate(task, delay, interval);
     }
 
     public void stop() {
         onStopCalled();
-        this.wasCancelled = true;
-        this.task.cancel();
+        task.cancel();
         dispose();
+    }
+
+    public void restart() {
+        stop();
+        this.task = createTask();
+        start();
     }
 
     // Call this when there's no further use for this timer
     public void dispose(){
-        cancel();
-        purge();
+        timer.cancel();
+        timer.purge();
     }
 
-    private TimerTask getTask(final long totalTime) {
+    private TimerTask createTask() {
         return new TimerTask() {
-
             @Override
             public void run() {
-                long timeLeft;
-                if (startTime < 0 || restart) {
-                    startTime = scheduledExecutionTime();
-                    timeLeft = totalTime;
-                    restart = false;
+                long timeLeft = calculateTimeLeft();
+                if (timeLeft <= 0) {
+                    cancel();
+                    onFinished();
                 } else {
-                    timeLeft = totalTime - (scheduledExecutionTime() - startTime);
-
-                    if (timeLeft <= 0) {
-                        this.cancel();
-                        startTime = -1;
-                        onFinished();
-                        return;
-                    }
+                    onTick(timeLeft);
                 }
-
-                onTick(timeLeft);
             }
         };
+    }
+
+    private long calculateTimeLeft() {
+        long currentTime = task.scheduledExecutionTime();
+        if (startTime < 0) {
+            startTime = currentTime;
+            return totalTime;
+        }
+
+        long elapsedTime = currentTime - startTime;
+        long timeLeft = totalTime - elapsedTime;
+
+        return Math.max(timeLeft, 0); // Ensure timeLeft is non-negative
     }
 
     public abstract void onTick(long timeLeft);

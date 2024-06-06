@@ -58,7 +58,7 @@ public class HBRecorder implements MyListener {
     private String notificationButtonText;
     private int audioBitrate = 0;
     private int audioSamplingRate = 0;
-    private FileObserver observer;
+    private MultiFileObserver observer;
     private final HBRecorderListener hbRecorderListener;
     private byte[] byteArray;
     private int vectorDrawable = 0;
@@ -332,9 +332,9 @@ public class HBRecorder implements MyListener {
                 if (outputPath != null) {
                     File file = new File(outputPath);
                     String parent = file.getParent();
-                    observer = new FileObserver(parent, HBRecorder.this);
+                    observer = new MultiFileObserver(parent, HBRecorder.this);
                 } else {
-                    observer = new FileObserver(String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)), HBRecorder.this);
+                    observer = new MultiFileObserver(String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)), HBRecorder.this);
                 }
                 observer.startWatching();
             }

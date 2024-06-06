@@ -5,22 +5,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import android.os.FileObserver;
 import android.os.Handler;
 import android.os.Looper;
 
 
-class FileObserver extends android.os.FileObserver {
+public class MultiFileObserver extends FileObserver {
 
     private List<SingleFileObserver> mObservers;
     private final String mPath;
     private final int mMask;
-    private final MyListener ml;
+    private final MyListener mListener;
 
-    FileObserver(String path, MyListener ml) {
+    public MultiFileObserver(String path, MyListener listener) {
         super(path, ALL_EVENTS);
         mPath = path;
         mMask = ALL_EVENTS;
-        this.ml = ml;
+        mListener = listener;
     }
 
 
@@ -37,7 +38,7 @@ class FileObserver extends android.os.FileObserver {
             mObservers.add(new SingleFileObserver(parent, mMask));
             File path = new File(parent);
             File[] files = path.listFiles();
-            if (null == files) continue;
+            if (files == null) continue;
 
             for (File f : files) {
                 if (f.isDirectory() && !f.getName().equals(".") && !f.getName().equals("..")) {
@@ -66,14 +67,15 @@ class FileObserver extends android.os.FileObserver {
     public void onEvent(int event, final String path) {
         if (event == android.os.FileObserver.CLOSE_WRITE) {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
                 public void run() {
-                    ml.onCompleteCallback();
+                    mListener.onCompleteCallback();
                 }
             });
         }
     }
 
-    class SingleFileObserver extends android.os.FileObserver {
+    class SingleFileObserver extends FileObserver {
         final String mPath;
 
 
@@ -85,7 +87,7 @@ class FileObserver extends android.os.FileObserver {
         @Override
         public void onEvent(int event, String path) {
             String newPath = mPath + "/" + path;
-            FileObserver.this.onEvent(event, newPath);
+            MultiFileObserver.this.onEvent(event, newPath);
         }
     }
 }
