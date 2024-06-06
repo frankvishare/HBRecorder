@@ -97,14 +97,10 @@ public class MainActivity extends AppCompatActivity implements HBRecorderListene
     //Start/Stop Button
     private Button startbtn;
 
-    //HD/SD quality
-    private RadioGroup radioGroup;
-
     //Should record/show audio/notification
     private CheckBox recordAudioCheckBox;
 
     //Reference to checkboxes and radio buttons
-    boolean wasHDSelected = true;
     boolean isAudioEnabled = true;
 
     //Should custom settings be used
@@ -121,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements HBRecorderListene
 
         initViews();
         setOnClickListeners();
-        setRadioGroupCheckListener();
         setRecordAudioCheckBoxListener();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -190,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements HBRecorderListene
     //Init Views
     private void initViews() {
         startbtn = findViewById(R.id.button_start);
-        radioGroup = findViewById(R.id.radio_group);
         recordAudioCheckBox = findViewById(R.id.audio_check_box);
         custom_settings_switch = findViewById(R.id.custom_settings_switch);
     }
@@ -229,23 +223,6 @@ public class MainActivity extends AppCompatActivity implements HBRecorderListene
                 }
             } else {
                 showLongToast("This library requires API 21>");
-            }
-        });
-    }
-
-    //Check if HD/SD Video should be recorded
-    private void setRadioGroupCheckListener() {
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-
-                if (checkedId == R.id.hd_button) {
-                    //Ser HBRecorder to HD
-                    wasHDSelected = true;
-                } else if (checkedId == R.id.sd_button) {
-                    //Ser HBRecorder to SD
-                    wasHDSelected = false;
-                }
             }
         });
     }
@@ -349,7 +326,6 @@ public class MainActivity extends AppCompatActivity implements HBRecorderListene
     private void startRecordingScreen() {
         if (custom_settings_switch.isChecked()) {
             //WHEN SETTING CUSTOM SETTINGS YOU MUST SET THIS!!!
-            hbRecorder.enableCustomSettings();
             customSettings();
             MediaProjectionManager mediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
             Intent permissionIntent = mediaProjectionManager != null ? mediaProjectionManager.createScreenCaptureIntent() : null;
@@ -516,9 +492,15 @@ public class MainActivity extends AppCompatActivity implements HBRecorderListene
     //Get/Set the selected settings
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void quickSettings() {
+        hbRecorder.setAudioSource("MIC");
+        hbRecorder.setVideoEncoder("HEVC");
+        hbRecorder.setScreenDimensions(1920, 1080);
+        hbRecorder.setVideoFrameRate(30);
+        hbRecorder.setVideoBitrate(8000000);
+        hbRecorder.setOutputFormat("MPEG_4");
+
         hbRecorder.setAudioBitrate(128000);
         hbRecorder.setAudioSamplingRate(44100);
-        hbRecorder.recordHDVideo(wasHDSelected);
         hbRecorder.isAudioEnabled(isAudioEnabled);
         //Customise Notification
         hbRecorder.setNotificationSmallIcon(R.drawable.icon);

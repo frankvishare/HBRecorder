@@ -68,7 +68,6 @@ public class ScreenRecordService extends Service {
     private int mScreenDensity;
     private int mResultCode;
     private Intent mResultData;
-    private boolean isVideoHD;
     private boolean isAudioEnabled;
     private String path;
 
@@ -82,7 +81,6 @@ public class ScreenRecordService extends Service {
     private static String fileName;
     private int audioSourceAsInt;
     private int videoEncoderAsInt;
-    private boolean isCustomSettingsEnabled;
     private int videoFrameRate;
     private int videoBitrate;
     private int outputFormatAsInt;
@@ -149,7 +147,6 @@ public class ScreenRecordService extends Service {
                 }
 
                 mScreenDensity = intent.getIntExtra("density", 1);
-                isVideoHD = intent.getBooleanExtra("quality", true);
                 isAudioEnabled = intent.getBooleanExtra("audio", true);
                 path = intent.getStringExtra("path");
                 name = intent.getStringExtra("fileName");
@@ -172,8 +169,6 @@ public class ScreenRecordService extends Service {
                 if (outputFormat != null) {
                     setOutputFormatAsInt(outputFormat);
                 }
-
-                isCustomSettingsEnabled = intent.getBooleanExtra("enableCustomSettings", false);
 
                 //Set notification notification button text if developer did not
                 if (notificationButtonText == null) {
@@ -407,7 +402,7 @@ public class ScreenRecordService extends Service {
     private void setvideoEncoderAsInt(String encoder) {
         switch (encoder) {
             case "DEFAULT":
-                videoEncoderAsInt = 0;
+                videoEncoderAsInt = 5;  //Change to use HEVC instead
                 break;
             case "H263":
                 videoEncoderAsInt = 1;
@@ -492,12 +487,9 @@ public class ScreenRecordService extends Service {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss", Locale.getDefault());
         Date curDate = new Date(System.currentTimeMillis());
         String curTime = formatter.format(curDate).replace(" ", "");
-        String videoQuality = "HD";
-        if (!isVideoHD) {
-            videoQuality = "SD";
-        }
+
         if (name == null) {
-            name = videoQuality + curTime;
+            name = curTime;
         }
 
         filePath = path + "/" + name + ".mp4";
@@ -543,19 +535,8 @@ public class ScreenRecordService extends Service {
             mMediaRecorder.setOutputFile(filePath);
         }
         mMediaRecorder.setVideoSize(mScreenWidth, mScreenHeight);
-
-        if (!isCustomSettingsEnabled) {
-            if (!isVideoHD) {
-                mMediaRecorder.setVideoEncodingBitRate(12000000);
-                mMediaRecorder.setVideoFrameRate(30);
-            } else {
-                mMediaRecorder.setVideoEncodingBitRate(5 * mScreenWidth * mScreenHeight);
-                mMediaRecorder.setVideoFrameRate(60); //after setVideoSource(), setOutFormat()
-            }
-        } else {
-            mMediaRecorder.setVideoEncodingBitRate(videoBitrate);
-            mMediaRecorder.setVideoFrameRate(videoFrameRate);
-        }
+        mMediaRecorder.setVideoEncodingBitRate(videoBitrate);
+        mMediaRecorder.setVideoFrameRate(videoFrameRate);
 
         // Catch approaching file limit
         if ( maxFileSize > NO_SPECIFIED_MAX_SIZE) {

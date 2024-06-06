@@ -157,9 +157,6 @@ hbrecorder.setAudioSamplingRate(int);
 // Enable/Disable audio
 // Defaults to true
 hbrecorder.isAudioEnabled(boolean);
-// Enable/Disable HD Video
-// Defaults to true
-hbrecorder.recordHDVideo(boolean);
 // Get file path as String
 hbrecorder.getFilePath();
 // Get file name as String

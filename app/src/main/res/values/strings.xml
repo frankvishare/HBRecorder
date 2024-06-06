@@ -3,8 +3,7 @@
     <string name="start_recording">START</string>
     <string name="stop_recording">STOP</string>
     <string name="record_audio">Record Audio</string>
-    <string name="high_definition">High Definition</string>
-    <string name="standard_definition">Standard Definition</string>
+    <string name="default_setting">1920x1080 30fps HEVC</string>
     <string name="max_file_label">Max File Size (k)</string>
 
     <string name="action_settings">Settings</string>

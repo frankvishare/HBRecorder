@@ -50,7 +50,6 @@ public class HBRecorder implements MyListener {
     private final Context context;
     private int resultCode;
     private boolean isAudioEnabled = true;
-    private boolean isVideoHDEnabled = true;
     private String outputPath;
     private String fileName;
     private String notificationTitle;
@@ -64,7 +63,6 @@ public class HBRecorder implements MyListener {
     private int vectorDrawable = 0;
     private String audioSource = "MIC";
     private String videoEncoder = "DEFAULT";
-    private boolean enableCustomSettings = false;
     private int videoFrameRate = 30;
     private int videoBitrate = 40000000;
     private String outputFormat = "DEFAULT";
@@ -173,21 +171,10 @@ public class HBRecorder implements MyListener {
 
     }
 
-    /*Enable/Disable HD recording*/
-    public void recordHDVideo(boolean bool) {
-        this.isVideoHDEnabled = bool;
-    }
-
     /*Set Video Encoder*/
     //MUST BE ONE OF THE FOLLOWING - https://developer.android.com/reference/android/media/MediaRecorder.VideoEncoder.html
     public void setVideoEncoder(String encoder){
         videoEncoder = encoder;
-
-    }
-
-    //Enable Custom Settings
-    public void enableCustomSettings(){
-        enableCustomSettings = true;
 
     }
 
@@ -349,7 +336,6 @@ public class HBRecorder implements MyListener {
             service.putExtra("width", mScreenWidth);
             service.putExtra("height", mScreenHeight);
             service.putExtra("density", mScreenDensity);
-            service.putExtra("quality", isVideoHDEnabled);
             service.putExtra("path", outputPath);
             service.putExtra("fileName", fileName);
             service.putExtra("orientation", orientation);
@@ -360,7 +346,6 @@ public class HBRecorder implements MyListener {
             service.putExtra("notificationTitle", notificationTitle);
             service.putExtra("notificationDescription", notificationDescription);
             service.putExtra("notificationButtonText", notificationButtonText);
-            service.putExtra("enableCustomSettings", enableCustomSettings);
             service.putExtra("audioSource",audioSource);
             service.putExtra("videoEncoder", videoEncoder);
 

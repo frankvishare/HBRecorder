@@ -20,39 +20,23 @@
         android:id="@+id/title_qs"
         android:textStyle="bold"/>
 
-    <RadioGroup
-        android:layout_below="@+id/title_qs"
-        android:layout_marginTop="20dp"
-        android:id="@+id/radio_group"
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/default_setting"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/title_qs"
         android:layout_centerHorizontal="true"
-        android:orientation="vertical">
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/hd_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/high_definition"
-            />
-
-        <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/sd_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/standard_definition"
-            />
-
-    </RadioGroup>
+        android:id="@+id/default_setting"/>
 
 
     <CheckBox
         android:id="@+id/audio_check_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/radio_group"
-        android:layout_below="@+id/radio_group"
+        android:layout_alignStart="@+id/default_setting"
+        android:layout_below="@+id/default_setting"
         android:layout_marginTop="30dp"
         android:checked="true"
         android:text="@string/record_audio"
